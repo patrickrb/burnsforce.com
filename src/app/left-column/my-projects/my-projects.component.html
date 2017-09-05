@@ -1,0 +1,44 @@
+<section class="latest section">
+    <div class="section-inner">
+        <h2 class="heading">Latest Projects</h2>
+        <div class="content">
+            <div class="item featured text-center">
+                <div class="row">
+                  <h3 class="title"><a href="{{projects.featured.url}}" target="_blank">{{projects.featured.name}}</a></h3>
+                  <p class="summary">{{projects.featured.shortTag}}</p>
+                </div>
+                <div class="row">
+                  <div class="featured-image">
+                      <a href="{{projects.featured.url}}" target="_blank">
+                      <video class="img-responsive project-image" alt="project name" autoplay loop>
+                        <source src="{{projects.featured.image}}"  type="video/mp4"/>
+                      </video>
+                      </a>
+                      <div class="ribbon">
+                        <div class="text">New</div>
+                      </div>
+                  </div>
+                </div>
+                <div class="row top-buffer">
+                  <div class="desc text-left">
+                      <p>{{projects.featured.description}}</p>
+                  </div>
+                </div>
+            </div>
+            <hr class="divider" />
+            <div *ngFor="let project of projects.other" class="item row">
+                <a class="col-md-4 col-sm-4 col-xs-12" href="{{project.url}}" target="_blank">
+                <img class="img-responsive project-image" src="{{project.image}}" alt="{{project.name}}" />
+                </a>
+                <div class="desc col-md-8 col-sm-8 col-xs-12">
+                    <h3 class="title"><a href="{{project.url}}" target="_blank">{{project.name}}</a></h3>
+                    <p>{{project.description}}</p>
+                    <p>
+                      <a *ngIf="project.github" class="more-link" href="{{project.github}}" target="_blank"><i class="fa fa-github"></i>Github</a>&nbsp;
+                      <a *ngIf="project.url" class="more-link" href="{{project.url}}" target="_blank"><i class="fa fa-external-link"></i>Demo</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

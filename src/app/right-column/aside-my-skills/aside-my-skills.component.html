@@ -1,0 +1,18 @@
+<aside class="skills aside section">
+    <div class="section-inner">
+        <h2 class="heading">Skills</h2>
+        <div class="content">
+
+            <div class="skillset">
+
+                <div *ngFor="let skill of mySkills" class="item">
+                    <h3 class="level-title">{{skill.name}}<span class="level-label" data-placement="left">{{skill.level}}</span></h3>
+                    <div class="level-bar">
+                        <div class="level-bar-inner" [attr.data-level]="skill.percent">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</aside>
