@@ -7,7 +7,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HeaderComponent implements OnInit {
 
-  private title = "Web App Developer"
+  title = "Web App Developer"
   constructor() { }
 
   ngOnInit() {

@@ -1,0 +1,7 @@
+version: '3'
+services:
+  burnsforce:
+    build: .
+    image: registry.gitlab.com/patrickrb/burnsforce.com
+    ports:
+      - "80:80"
