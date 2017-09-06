@@ -114,7 +114,7 @@ export class ThreejsAnimationComponent implements AfterViewInit {
     let size = this.getWidthAndHeight();
     /* Renderer */
     // Use canvas element in template
-    this.renderer = new THREE.WebGLRenderer({ canvas: this.canvas });
+    this.renderer = new THREE.WebGLRenderer({ canvas: this.canvas, antialias: true, alpha: true });
     this.renderer.setPixelRatio(devicePixelRatio);
     this.renderer.setSize(size.width, size.height);
 
