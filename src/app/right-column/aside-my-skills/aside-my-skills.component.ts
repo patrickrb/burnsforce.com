@@ -45,7 +45,6 @@ export class AsideMySkillsComponent implements OnInit {
 
   ngAfterViewInit() {
     jQuery('.level-bar-inner').each(function() {
-      console.log('found bar')
         var itemWidth = jQuery(this).data('level');
         jQuery(this).animate({
             width: itemWidth
