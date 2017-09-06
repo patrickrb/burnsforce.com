@@ -130,7 +130,7 @@ export class ThreejsAnimationComponent implements AfterViewInit {
       let width = window.innerWidth;
       let height = 300;
       if(width <= 767){
-        height = 500
+        height = 530
       }
       return {width:width, height: height};
 
