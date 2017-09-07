@@ -141,7 +141,7 @@ export class ThreejsAnimationComponent implements AfterViewInit {
   /**
    * Update scene after resizing.
    */
-  public onResize() {
+  public onResize(event) {
     this.camera.aspect = this.getAspectRatio();
     this.camera.updateProjectionMatrix();
 
