@@ -3,10 +3,10 @@ header{
   padding-top: 0px;
   border: none;
   height:300px;
-  background: #9ebb9c ; /* Old browsers */
-  background: -moz-linear-gradient(top,  #9ebb9c  0%, #054235 100%); /* FF3.6-15 */
-  background: -webkit-linear-gradient(top,  #9ebb9c  0%,#054235 100%); /* Chrome10-25,Safari5.1-6 */
-  background: linear-gradient(to bottom,  #9ebb9c  0%,#054235 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  background: #3AAA64 ; /* Old browsers */
+  background: -moz-radial-gradient(#3AAA64 0%,#000 100%); /* FF3.6-15 */
+  background: -webkit-radial-gradient(#3AAA64 0%,#000 100%); /* Chrome10-25,Safari5.1-6 */
+	background: radial-gradient(#3AAA64 0%,#000 100%);
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#9ebb9c ', endColorstr='#054235',GradientType=0 ); /* IE6-9 */
 }
 app-threejs-animation{
@@ -22,9 +22,11 @@ app-threejs-animation{
   left: 0px;
 }
 
-
-
-
+.profile-content{
+   .name, .desc{
+    color: #f0f0f0;
+  }
+}
 
 @media (max-width: 767px) {
 
@@ -47,10 +49,4 @@ app-threejs-animation{
     -webkit-transform: translateX(-50%);
     transform: translateX(-50%);
   }
-  .profile-content{
-     .name, .desc{
-      color: #ffffff;
-    }
-  }
-
 }
