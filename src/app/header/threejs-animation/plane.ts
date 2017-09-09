@@ -1,10 +1,12 @@
+import { TimelineMax, Expo, Elastic, Linear } from 'gsap';
 import * as THREE from 'three';
 
 export class Plane {
 
   private mesh:THREE.Object3D = new THREE.Object3D();
-  private airplane;
+  private tl = new TimelineMax({repeat: -1 , repeatDelay: 2.0});
   private prop:THREE.Mesh;
+  private mousePos = { x:0, y: 0, z: 0 };
 
   private colors = {
   	red:0xf25346,
@@ -162,9 +164,28 @@ export class Plane {
     this.mesh.rotation.x = 0.5;
     this.mesh.position.z = -50;
     scene.add(this.mesh);
+
+		this.tl.to(this.mousePos, 2, {y: 50, ease: Linear.ease});
+		this.tl.to(this.mousePos, 2, {y: 0, ease: Linear.ease});
   }
 
   animate(){
     this.prop.rotation.x += 0.3;
+    var targetY = this.normalize(this.mousePos.y, -1, 1, 25, 175);
+
+    this.mesh.position.y += (targetY-this.mesh.position.y)*0.05;
+
+    // rotate the plane
+    this.mesh.rotation.z = (targetY-this.mesh.position.y)*-0.0128;
+    this.mesh.rotation.z = (this.mesh.position.y-targetY)*-0.0064;
+  }
+
+  normalize (v, vmin, vmax, tmin, tmax) {
+    var nv = Math.max(Math.min(v,vmax), vmin);
+    var dv = vmax-vmin;
+    var pc = (nv-vmin)/dv;
+    var dt = tmax-tmin;
+    var tv = tmin + (pc*dt);
+    return tv;
   }
 }

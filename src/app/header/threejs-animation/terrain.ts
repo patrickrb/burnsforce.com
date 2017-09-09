@@ -41,7 +41,7 @@ export class Terrain {
   }
 
   animate(){
-    this.planet.rotation.z += .001;
+    this.planet.rotation.z += .005;
     this.planet.rotation.y = 0;
     this.planet.rotation.x = 0;
   }

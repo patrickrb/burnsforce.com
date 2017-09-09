@@ -2,6 +2,7 @@ import {AfterViewInit, Component, ElementRef, Input, ViewChild } from '@angular/
 import { Scene } from './scene';
 import { Terrain } from './terrain';
 import { Plane } from './plane';
+import { Clouds } from './clouds';
 import * as THREE from 'three';
 
 @Component({
@@ -23,6 +24,7 @@ export class ThreejsAnimationComponent implements AfterViewInit {
   private renderer: THREE.WebGLRenderer;
   private plane: Plane = new Plane();
   private terrain: Terrain = new Terrain();
+  private clouds: Clouds = new Clouds();
   private scene: Scene;
 
   //camera settings
@@ -37,6 +39,7 @@ export class ThreejsAnimationComponent implements AfterViewInit {
   private addObjectsToScene() {
     this.terrain.create(this.scene);
     this.plane.create(this.scene);
+    this.clouds.create(this.scene);
   }
 
   private createScene() {
@@ -71,10 +74,12 @@ export class ThreejsAnimationComponent implements AfterViewInit {
     let scene = this.scene.scene;
     let terrain = this.terrain;
     let plane = this.plane;
+    let clouds = this.clouds;
     (function render() {
       requestAnimationFrame(render);
       terrain.animate();
       plane.animate();
+      clouds.animate();
       component.renderer.render(scene, component.camera);
     }());
   }
