@@ -160,6 +160,7 @@ export class Plane {
     this.mesh.scale.set(0.25,0.25,0.25);
     this.mesh.position.y = 100;
     this.mesh.rotation.x = 0.5;
+    this.mesh.position.z = -50;
     scene.add(this.mesh);
   }
 

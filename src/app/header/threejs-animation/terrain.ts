@@ -30,9 +30,11 @@ export class Terrain {
     mesh.scale.x = mesh.scale.y = mesh.scale.z = 20;
 
     let ambientLight = new THREE.AmbientLight(0xBD9779);
+    ambientLight.castShadow = true;
     scene.add(ambientLight);
 
     let directionalLight = new THREE.DirectionalLight(0xffffff);
+    directionalLight.castShadow = true;
     directionalLight.position.set(1, 1, 1).normalize();
     scene.add(directionalLight);
 
