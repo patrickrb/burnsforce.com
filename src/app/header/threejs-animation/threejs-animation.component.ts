@@ -1,4 +1,6 @@
 import {AfterViewInit, Component, ElementRef, Input, ViewChild } from '@angular/core';
+import { Scene } from './scene';
+import { Terrain } from './terrain';
 import * as THREE from 'three';
 
 @Component({
@@ -7,91 +9,37 @@ import * as THREE from 'three';
   styleUrls: ['./threejs-animation.component.less']
 })
 export class ThreejsAnimationComponent implements AfterViewInit {
-  /* HELPER PROPERTIES (PRIVATE PROPERTIES) */
-  private camera: THREE.PerspectiveCamera;
+  //setup canvas
+  @ViewChild('canvas')
+  private canvasRef: ElementRef;
 
   private get canvas() : HTMLCanvasElement {
     return this.canvasRef.nativeElement;
   }
 
-  @ViewChild('canvas')
-  private canvasRef: ElementRef;
-
-  private cube: THREE.Mesh;
-
+  //setup threejs and import custom classes
+  private camera: THREE.PerspectiveCamera;
   private renderer: THREE.WebGLRenderer;
+  private terrain: Terrain = new Terrain();
+  private scene: Scene;
 
-  private scene: THREE.Scene;
-
-
-
-  /* CUBE PROPERTIES */
-  @Input()
-  public rotationSpeedX: number = 0.005;
-
-  @Input()
-  public rotationSpeedY: number = 0.01;
-
-  @Input()
-  public size: number = 200;
-
-  @Input()
-  public texture: string = '/assets/textures/crate.gif';
-
-
-
-  /* STAGE PROPERTIES */
-  @Input()
-  public cameraZ: number = 400;
-
-  @Input()
-  public fieldOfView: number = 70;
-
-  @Input('nearClipping')
+  //camera settings
+  public cameraPos = { x: 0, y: 100, z: 400 };
+  public fieldOfView: number = 25;
   public nearClippingPane: number = 1;
-
-  @Input('farClipping')
   public farClippingPane: number = 1000;
 
 
-
-  /* DEPENDENCY INJECTION (CONSTRUCTOR) */
   constructor() { }
 
-
-
-  /* STAGING, ANIMATION, AND RENDERING */
-
-  /**
-   * Animate the cube
-   */
-  private animateCube() {
-    this.cube.rotation.x += this.rotationSpeedX;
-    this.cube.rotation.y += this.rotationSpeedY;
+  private addObjectsToScene() {
+    this.terrain.create(this.scene);
   }
 
-  /**
-   * Create the cube
-   */
-  private createCube() {
-    let texture = new THREE.TextureLoader().load(this.texture);
-    let material = new THREE.MeshBasicMaterial({ map: texture });
-
-    let geometry = new THREE.BoxBufferGeometry(this.size, this.size, this.size);
-    this.cube = new THREE.Mesh(geometry, material);
-
-    // Add cube to scene
-    this.scene.add(this.cube);
-  }
-
-  /**
-   * Create the scene
-   */
   private createScene() {
-    /* Scene */
-    this.scene = new THREE.Scene();
+    this.scene = new Scene();
 
-    /* Camera */
+    //setup camera
     let aspectRatio = this.getAspectRatio();
     this.camera = new THREE.PerspectiveCamera(
       this.fieldOfView,
@@ -99,7 +47,7 @@ export class ThreejsAnimationComponent implements AfterViewInit {
       this.nearClippingPane,
       this.farClippingPane
     );
-    this.camera.position.z = this.cameraZ;
+    this.camera.position.set(this.cameraPos.x,this.cameraPos.y,this.cameraPos.z);
   }
 
   private getAspectRatio() {
@@ -107,9 +55,7 @@ export class ThreejsAnimationComponent implements AfterViewInit {
     return size.width / size.height;
   }
 
-  /**
-   * Start the rendering loop
-   */
+
   private startRenderingLoop() {
     let size = this.getWidthAndHeight();
     /* Renderer */
@@ -119,10 +65,12 @@ export class ThreejsAnimationComponent implements AfterViewInit {
     this.renderer.setSize(size.width, size.height);
 
     let component: ThreejsAnimationComponent = this;
+    let scene = this.scene.scene;
+    let terrain = this.terrain;
     (function render() {
       requestAnimationFrame(render);
-      component.animateCube();
-      component.renderer.render(component.scene, component.camera);
+      terrain.animate();
+      component.renderer.render(scene, component.camera);
     }());
   }
 
@@ -136,11 +84,7 @@ export class ThreejsAnimationComponent implements AfterViewInit {
 
   }
 
-  /* EVENTS */
-
-  /**
-   * Update scene after resizing.
-   */
+  //Update scene after resizing.
   public onResize(event) {
     this.camera.aspect = this.getAspectRatio();
     this.camera.updateProjectionMatrix();
@@ -152,17 +96,10 @@ export class ThreejsAnimationComponent implements AfterViewInit {
   }
 
 
-
-  /* LIFECYCLE */
-
-  /**
-   * We need to wait until template is bound to DOM, as we need the view
-   * dimensions to create the scene. We could create the cube in a Init hook,
-   * but we would be unable to add it to the scene until now.
-   */
+  //wait for view to init before starting threejs
   public ngAfterViewInit() {
     this.createScene();
-    this.createCube();
+    this.addObjectsToScene();
     this.startRenderingLoop();
   }
 }
