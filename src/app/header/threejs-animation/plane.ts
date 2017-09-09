@@ -3,6 +3,7 @@ import * as THREE from 'three';
 export class Plane {
 
   private mesh:THREE.Object3D = new THREE.Object3D();
+  private airplane;
   private prop:THREE.Mesh;
 
   private colors = {
@@ -160,5 +161,9 @@ export class Plane {
     this.mesh.position.y = 100;
     this.mesh.rotation.x = 0.5;
     scene.add(this.mesh);
+  }
+
+  animate(){
+    this.prop.rotation.x += 0.3;
   }
 }

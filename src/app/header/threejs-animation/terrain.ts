@@ -3,16 +3,13 @@ import * as THREE from 'three';
 export class Terrain {
 
   private planet:THREE.Object3D = new THREE.Object3D();
-  private skelet:THREE.Object3D = new THREE.Object3D();
 
   constructor() {}
 
   create(scene) {
     scene.add(this.planet);
-    scene.add(this.skelet);
 
     this.planet.position.y = -180;
-    this.skelet.position.y = -180;
 
     let geom = new THREE.IcosahedronGeometry(15, 2);
     let mat = new THREE.MeshPhongMaterial({
@@ -31,8 +28,6 @@ export class Terrain {
 
     mesh = new THREE.Mesh(geom, bones);
     mesh.scale.x = mesh.scale.y = mesh.scale.z = 20;
-    this.skelet.add(mesh);
-
 
     let ambientLight = new THREE.AmbientLight(0xBD9779);
     scene.add(ambientLight);
@@ -47,8 +42,5 @@ export class Terrain {
     this.planet.rotation.z += .001;
     this.planet.rotation.y = 0;
     this.planet.rotation.x = 0;
-    this.skelet.rotation.z -= .001;
-    this.skelet.rotation.y = 0;
-    this.skelet.rotation.x = 0;
   }
 }

@@ -70,9 +70,11 @@ export class ThreejsAnimationComponent implements AfterViewInit {
     let component: ThreejsAnimationComponent = this;
     let scene = this.scene.scene;
     let terrain = this.terrain;
+    let plane = this.plane;
     (function render() {
       requestAnimationFrame(render);
       terrain.animate();
+      plane.animate();
       component.renderer.render(scene, component.camera);
     }());
   }
