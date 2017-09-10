@@ -1,10 +1,8 @@
-import { TimelineMax, Expo, Elastic, Linear } from 'gsap';
 import * as THREE from 'three';
 
 export class Plane {
 
   private mesh:THREE.Object3D = new THREE.Object3D();
-  private tl = new TimelineMax({repeat: -1 , repeatDelay: 2.0});
   private prop:THREE.Mesh;
   private mousePos = { x:0, y: 0, z: 0 };
   private direction = 'up';
@@ -165,9 +163,6 @@ export class Plane {
     this.mesh.rotation.x = 0.5;
     this.mesh.position.z = -50;
     scene.add(this.mesh);
-
-		// this.tl.to(this.mousePos, 2, {y: 50, ease: Linear.ease});
-		// this.tl.to(this.mousePos, 2, {y: 0, ease: Linear.ease});
   }
 
   animate(){
