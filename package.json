@@ -28,8 +28,9 @@
     "gsap": "^1.20.2",
     "jquery": "^3.2.1",
     "ngx-bootstrap": "^1.9.1",
+    "postprocessing": "^2.3.1",
     "rxjs": "^5.4.2",
-    "three.js": "^0.77.1",
+    "three": "0.87.1",
     "zone.js": "^0.8.14"
   },
   "devDependencies": {

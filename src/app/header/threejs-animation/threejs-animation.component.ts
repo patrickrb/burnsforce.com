@@ -1,4 +1,5 @@
 import {AfterViewInit, Component, ElementRef, Input, ViewChild } from '@angular/core';
+import { EffectComposer, GlitchPass, RenderPass } from "postprocessing";
 import { Scene } from './scene';
 import { Terrain } from './terrain';
 import { Plane } from './plane';
@@ -26,6 +27,8 @@ export class ThreejsAnimationComponent implements AfterViewInit {
   private terrain: Terrain = new Terrain();
   private clouds: Clouds = new Clouds();
   private scene: Scene;
+  private clock = new THREE.Clock();
+  private composer;
 
   //camera settings
   public cameraPos = { x: 0, y: 100, z: 400 };
@@ -36,16 +39,15 @@ export class ThreejsAnimationComponent implements AfterViewInit {
 
   constructor() { }
 
-  private addObjectsToScene() {
-    this.terrain.create(this.scene);
-    this.plane.create(this.scene);
-    this.clouds.create(this.scene);
+  private createRenderer(){
+    let size = this.getWidthAndHeight();
+    this.renderer = new THREE.WebGLRenderer({ canvas: this.canvas, antialias: true, alpha: true });
+    this.renderer.setPixelRatio(devicePixelRatio);
+    this.renderer.setSize(size.width, size.height);
   }
 
   private createScene() {
     this.scene = new Scene();
-
-    //setup camera
     let aspectRatio = this.getAspectRatio();
     this.camera = new THREE.PerspectiveCamera(
       this.fieldOfView,
@@ -56,42 +58,26 @@ export class ThreejsAnimationComponent implements AfterViewInit {
     this.camera.position.set(this.cameraPos.x,this.cameraPos.y,this.cameraPos.z);
   }
 
-  private getAspectRatio() {
-    let size = this.getWidthAndHeight();
-    return size.width / size.height;
+  private addObjectsToScene() {
+    this.terrain.create(this.scene);
+    this.plane.create(this.scene);
+    this.clouds.create(this.scene);
   }
 
-
-  private startRenderingLoop() {
-    let size = this.getWidthAndHeight();
-    /* Renderer */
-    // Use canvas element in template
-    this.renderer = new THREE.WebGLRenderer({ canvas: this.canvas, antialias: true, alpha: true });
-    this.renderer.setPixelRatio(devicePixelRatio);
-    this.renderer.setSize(size.width, size.height);
-
-    let component: ThreejsAnimationComponent = this;
-    let scene = this.scene.scene;
-    let terrain = this.terrain;
-    let plane = this.plane;
-    let clouds = this.clouds;
-    (function render() {
-      requestAnimationFrame(render);
-      terrain.animate();
-      plane.animate();
-      clouds.animate();
-      component.renderer.render(scene, component.camera);
-    }());
+  private addEffects(){
+    this.composer = new EffectComposer(this.renderer);
+    this.composer.addPass(new RenderPass(this.scene.scene, this.camera));
+    let glitchPass = new GlitchPass();
+    glitchPass.renderToScreen = true;
+    this.composer.addPass(glitchPass);
   }
 
-  private getWidthAndHeight() {
-      let width = window.innerWidth;
-      let height = 300;
-      if(width <= 767){
-        height = 530
-      }
-      return {width:width, height: height};
-
+  private animate(){
+      requestAnimationFrame(this.animate.bind(this));
+      this.terrain.animate();
+      this.plane.animate();
+      this.clouds.animate();
+      this.composer.render(this.clock.getDelta())
   }
 
   //Update scene after resizing.
@@ -105,11 +91,26 @@ export class ThreejsAnimationComponent implements AfterViewInit {
     this.renderer.setSize(size.width, size.height);
   }
 
+  private getAspectRatio() {
+    let size = this.getWidthAndHeight();
+    return size.width / size.height;
+  }
+
+  private getWidthAndHeight() {
+      let width = window.innerWidth;
+      let height = 300;
+      if(width <= 767){
+        height = 530
+      }
+      return {width:width, height: height};
+  }
 
   //wait for view to init before starting threejs
   public ngAfterViewInit() {
+    this.createRenderer();
     this.createScene();
     this.addObjectsToScene();
-    this.startRenderingLoop();
+    this.addEffects();
+    this.animate();
   }
 }
