@@ -7,6 +7,7 @@ export class Plane {
   private tl = new TimelineMax({repeat: -1 , repeatDelay: 2.0});
   private prop:THREE.Mesh;
   private mousePos = { x:0, y: 0, z: 0 };
+  private direction = 'up';
 
   private colors = {
   	red:0xf25346,
@@ -165,13 +166,27 @@ export class Plane {
     this.mesh.position.z = -50;
     scene.add(this.mesh);
 
-		this.tl.to(this.mousePos, 2, {y: 50, ease: Linear.ease});
-		this.tl.to(this.mousePos, 2, {y: 0, ease: Linear.ease});
+		// this.tl.to(this.mousePos, 2, {y: 50, ease: Linear.ease});
+		// this.tl.to(this.mousePos, 2, {y: 0, ease: Linear.ease});
   }
 
   animate(){
+
+    if(this.direction === 'up'){
+        if(this.mousePos.y >= 50){
+          this.direction = 'down';
+        }
+        this.mousePos.y = this.mousePos.y +1;
+    }
+    if (this.direction === 'down'){
+        if(this.mousePos.y <= -50){
+          this.direction = 'up';
+        }
+        this.mousePos.y = this.mousePos.y -1;
+    }
+
     this.prop.rotation.x += 0.3;
-    var targetY = this.normalize(this.mousePos.y, -1, 1, 25, 175);
+    var targetY = this.normalize(this.mousePos.y, -1, 1, 100, 175);
 
     this.mesh.position.y += (targetY-this.mesh.position.y)*0.05;
 
