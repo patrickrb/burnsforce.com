@@ -32,8 +32,7 @@ export class Terrain {
     let ambientLight = new THREE.AmbientLight(0xBD9779);
     ambientLight.castShadow = true;
     scene.add(ambientLight);
-
-    let directionalLight = new THREE.DirectionalLight(0xffffff);
+    let directionalLight = new THREE.DirectionalLight(0xffffff, 1);
     directionalLight.castShadow = true;
     directionalLight.position.set(1, 1, 1).normalize();
     scene.add(directionalLight);

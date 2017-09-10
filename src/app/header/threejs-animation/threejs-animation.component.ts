@@ -1,9 +1,10 @@
 import {AfterViewInit, Component, ElementRef, Input, ViewChild } from '@angular/core';
-import { EffectComposer, GlitchPass, RenderPass } from "postprocessing";
+import { EffectComposer, GlitchPass, RenderPass, GodRaysPass, KernelSize } from "postprocessing";
 import { Scene } from './scene';
 import { Terrain } from './terrain';
 import { Plane } from './plane';
 import { Clouds } from './clouds';
+import { SunMoon } from './sun-moon';
 import * as THREE from 'three';
 
 @Component({
@@ -26,8 +27,10 @@ export class ThreejsAnimationComponent implements AfterViewInit {
   private plane: Plane = new Plane();
   private terrain: Terrain = new Terrain();
   private clouds: Clouds = new Clouds();
+  private sunMoon: SunMoon = new SunMoon();
   private scene: Scene;
   private clock = new THREE.Clock();
+  private godRays;
   private composer;
 
   //camera settings
@@ -62,14 +65,28 @@ export class ThreejsAnimationComponent implements AfterViewInit {
     this.terrain.create(this.scene);
     this.plane.create(this.scene);
     this.clouds.create(this.scene);
+    this.sunMoon.create(this.scene);
   }
 
   private addEffects(){
     this.composer = new EffectComposer(this.renderer);
     this.composer.addPass(new RenderPass(this.scene.scene, this.camera));
     let glitchPass = new GlitchPass();
+    this.godRays = new GodRaysPass(this.scene.scene, this.camera, this.sunMoon.getSun(), {
+			resolutionScale: 0.6,
+			kernelSize: KernelSize.SMALL,
+			intensity: 1.0,
+			density: 0.96,
+			decay: 0.93,
+			weight: 0.4,
+			exposure: 0.6,
+			samples: 60,
+			clampMax: 1.0
+		});
     glitchPass.renderToScreen = true;
+    this.godRays.renderToScreen = true;
     this.composer.addPass(glitchPass);
+    this.composer.addPass(this.godRays);
   }
 
   private animate(){
@@ -77,6 +94,7 @@ export class ThreejsAnimationComponent implements AfterViewInit {
       this.terrain.animate();
       this.plane.animate();
       this.clouds.animate();
+      this.sunMoon.animate();
       this.composer.render(this.clock.getDelta())
   }
 
